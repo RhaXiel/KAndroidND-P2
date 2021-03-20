@@ -1,5 +1,6 @@
 package com.udacity.asteroidradar.main
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -41,8 +42,10 @@ class MainViewModel : ViewModel() {
             _status.value = AsteroidApiStatus.LOADING
             try {
                 //getNextSevenDaysFormattedDates
-                val result  = AsteroidApi.retrofitService.getAsteroids("2015-09-07", "2015-09-08","apikey")
-                _asteroids.value = result.body()?.let { parseAsteroidsJsonResult(it) }
+                val result  = AsteroidApi.retrofitService.getAsteroids("2015-09-07", "2015-09-08","cLAk0LBCbzKCZ9yrpV1T3UdxLQiFB4kTf0rqx3cv")
+                //Log.i("hola", result.toString())
+                //result.
+                //_asteroids.value = result.body()?.let { parseAsteroidsJsonResult(it) }
                 _status.value = AsteroidApiStatus.DONE
             } catch (e: Exception){
                 _status.value = AsteroidApiStatus.ERROR

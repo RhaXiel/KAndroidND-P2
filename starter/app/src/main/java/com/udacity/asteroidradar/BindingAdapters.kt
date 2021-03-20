@@ -10,8 +10,8 @@ import com.udacity.asteroidradar.main.AsteroidListAdapter
 
 @BindingAdapter("listData")
 fun bindRecyclerView(recyclerView: RecyclerView, data: List<Asteroid>?){
-        val adapter = recyclerView.adapter as AsteroidListAdapter
-        adapter.submitList(data)
+        //val adapter = recyclerView.adapter as AsteroidListAdapter
+        //adapter.submitList(data)
 }
 
 @BindingAdapter("statusIcon")
