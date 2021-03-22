@@ -6,11 +6,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.udacity.asteroidradar.Asteroid
+import com.udacity.asteroidradar.api.getNextSevenDaysFormattedDates
 import com.udacity.asteroidradar.api.parseAsteroidsJsonResult
 import com.udacity.asteroidradar.network.AsteroidApi
 import com.udacity.asteroidradar.network.AsteroidApiFilter
 import kotlinx.coroutines.launch
 import okhttp3.ResponseBody
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Response
 import java.lang.Exception
@@ -41,11 +43,10 @@ class MainViewModel : ViewModel() {
         viewModelScope.launch {
             _status.value = AsteroidApiStatus.LOADING
             try {
-                //getNextSevenDaysFormattedDates
-                val result  = AsteroidApi.retrofitService.getAsteroids("2015-09-07", "2015-09-08","cLAk0LBCbzKCZ9yrpV1T3UdxLQiFB4kTf0rqx3cv")
-                //Log.i("hola", result.toString())
-                //result.
-                //_asteroids.value = result.body()?.let { parseAsteroidsJsonResult(it) }
+                val dates = getNextSevenDaysFormattedDates()
+                val result  = AsteroidApi.retrofitService.getAsteroids(dates.first(), dates.last(),"cLAk0LBCbzKCZ9yrpV1T3UdxLQiFB4kTf0rqx3cv").string()
+                var obj = JSONObject(result)
+                _asteroids.value = parseAsteroidsJsonResult(obj)
                 _status.value = AsteroidApiStatus.DONE
             } catch (e: Exception){
                 _status.value = AsteroidApiStatus.ERROR

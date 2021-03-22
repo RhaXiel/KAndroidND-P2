@@ -1,5 +1,6 @@
 package com.udacity.asteroidradar
 
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -7,11 +8,12 @@ import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.udacity.asteroidradar.main.AsteroidApiStatus
 import com.udacity.asteroidradar.main.AsteroidListAdapter
+import java.lang.Exception
 
 @BindingAdapter("listData")
 fun bindRecyclerView(recyclerView: RecyclerView, data: List<Asteroid>?){
-        //val adapter = recyclerView.adapter as AsteroidListAdapter
-        //adapter.submitList(data)
+        val adapter = recyclerView.adapter as AsteroidListAdapter
+        adapter.submitList(data)
 }
 
 @BindingAdapter("statusIcon")
@@ -59,7 +61,7 @@ fun bindStatus(statusImageView: ImageView, status: AsteroidApiStatus){
         }
         AsteroidApiStatus.ERROR -> {
             statusImageView.visibility = View.VISIBLE
-            statusImageView.setImageResource(R.drawable.loading_animation)
+            statusImageView.setImageResource(R.drawable.ic_connection_error)
         }
         AsteroidApiStatus.DONE -> {
             statusImageView.visibility = View.GONE

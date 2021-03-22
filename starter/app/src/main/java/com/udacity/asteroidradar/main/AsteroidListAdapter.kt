@@ -16,8 +16,6 @@ class AsteroidListAdapter(val onClickListener: OnClickListener) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(asteroid: Asteroid) {
             binding.asteroid = asteroid
-            // This is important, because it forces the data binding to execute immediately,
-            // which allows the RecyclerView to make the correct view size measurements
             binding.executePendingBindings()
         }
     }
@@ -37,11 +35,11 @@ class AsteroidListAdapter(val onClickListener: OnClickListener) :
     }
 
     override fun onBindViewHolder(holder: AsteroidViewHolder, position: Int) {
-        val marsProperty = getItem(position)
+        val asteroid = getItem(position)
         holder.itemView.setOnClickListener {
-            onClickListener.onClick(marsProperty)
+            onClickListener.onClick(asteroid)
         }
-        holder.bind(marsProperty)
+        holder.bind(asteroid)
     }
 
     class OnClickListener(val clickListener: (asteroid:Asteroid) -> Unit) {
