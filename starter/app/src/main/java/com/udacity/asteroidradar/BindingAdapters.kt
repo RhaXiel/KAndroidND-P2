@@ -4,16 +4,18 @@ import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.net.toUri
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.Picasso
 import com.udacity.asteroidradar.main.AsteroidApiStatus
 import com.udacity.asteroidradar.main.AsteroidListAdapter
 import java.lang.Exception
 
 @BindingAdapter("listData")
-fun bindRecyclerView(recyclerView: RecyclerView, data: List<Asteroid>?){
-        val adapter = recyclerView.adapter as AsteroidListAdapter
-        adapter.submitList(data)
+fun bindRecyclerView(recyclerView: RecyclerView, data: List<Asteroid>?) {
+    val adapter = recyclerView.adapter as AsteroidListAdapter
+    adapter.submitList(data)
 }
 
 @BindingAdapter("statusIcon")
@@ -22,6 +24,15 @@ fun bindAsteroidStatusImage(imageView: ImageView, isHazardous: Boolean) {
         imageView.setImageResource(R.drawable.ic_status_potentially_hazardous)
     } else {
         imageView.setImageResource(R.drawable.ic_status_normal)
+    }
+}
+
+@BindingAdapter("pictureOfDay")
+fun bindPictureOfDay(imageView: ImageView, pictureOfDay: PictureOfDay?) {
+    pictureOfDay?.url?.let {
+        val context = imageView.context
+        Picasso.with(context).load(pictureOfDay.url).placeholder(R.drawable.loading_animation).into(imageView)
+        imageView.contentDescription = pictureOfDay.title
     }
 }
 
@@ -53,8 +64,8 @@ fun bindTextViewToDisplayVelocity(textView: TextView, number: Double) {
 }
 
 @BindingAdapter("asteroidApiStatus")
-fun bindStatus(statusImageView: ImageView, status: AsteroidApiStatus){
-    when (status){
+fun bindStatus(statusImageView: ImageView, status: AsteroidApiStatus) {
+    when (status) {
         AsteroidApiStatus.LOADING -> {
             statusImageView.visibility = View.VISIBLE
             statusImageView.setImageResource(R.drawable.loading_animation)

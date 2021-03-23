@@ -6,16 +6,17 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.udacity.asteroidradar.Asteroid
+import com.udacity.asteroidradar.Constants.API_KEY
+import com.udacity.asteroidradar.PictureOfDay
 import com.udacity.asteroidradar.api.getNextSevenDaysFormattedDates
 import com.udacity.asteroidradar.api.parseAsteroidsJsonResult
 import com.udacity.asteroidradar.network.AsteroidApi
 import com.udacity.asteroidradar.network.AsteroidApiFilter
 import kotlinx.coroutines.launch
-import okhttp3.ResponseBody
 import org.json.JSONObject
-import retrofit2.Call
-import retrofit2.Response
 import java.lang.Exception
+import java.util.*
+import kotlin.collections.ArrayList
 
 enum class AsteroidApiStatus { LOADING, ERROR, DONE }
 
@@ -30,21 +31,60 @@ class MainViewModel : ViewModel() {
     val asteroids: LiveData<List<Asteroid>>
         get() = _asteroids
 
+    private val _pictureOfDay = MutableLiveData<PictureOfDay>()
+
+    val pictureOfDay: LiveData<PictureOfDay>
+        get() = _pictureOfDay
+
     private val _navigateToSelectedAsteroid = MutableLiveData<Asteroid>()
 
     val navigateToSelectedAsteroid: LiveData<Asteroid>
         get() = _navigateToSelectedAsteroid
 
     init {
+        getPictureOfDay()
         getAsteroids(AsteroidApiFilter.SHOW_WEEK)
+    }
+
+    private fun getPictureOfDay(){
+        viewModelScope.launch {
+            try {
+                val result = AsteroidApi.retrofitService.getPictureOfTheDay(API_KEY)
+                _pictureOfDay.value = result
+            } catch (e: Exception){
+                _status.value = AsteroidApiStatus.ERROR
+                _pictureOfDay.value = null
+            }
+        }
     }
 
     private fun getAsteroids(filter: AsteroidApiFilter){
         viewModelScope.launch {
             _status.value = AsteroidApiStatus.LOADING
             try {
-                val dates = getNextSevenDaysFormattedDates()
-                val result  = AsteroidApi.retrofitService.getAsteroids(dates.first(), dates.last(),"cLAk0LBCbzKCZ9yrpV1T3UdxLQiFB4kTf0rqx3cv").string()
+                val dates  = getNextSevenDaysFormattedDates()
+                var startDate : String = ""
+                var endDate : String = ""
+                when (filter) {
+                    AsteroidApiFilter.SHOW_WEEK -> {
+                        startDate = dates.first()
+                        endDate = dates.last()
+                    }
+                    AsteroidApiFilter.SHOW_TODAY -> {
+                        startDate = dates.first()
+                        endDate = dates.elementAt(1)
+                    }
+                    AsteroidApiFilter.SHOW_SAVED -> {
+                        //Do work from database
+                        _status.value = AsteroidApiStatus.DONE
+                        _asteroids.value = ArrayList()
+                        return@launch
+                    }
+                    else -> {
+                        //AN ERROR OCCURRED
+                    }
+                }
+                val result  = AsteroidApi.retrofitService.getAsteroids(startDate, endDate, API_KEY).string()
                 var obj = JSONObject(result)
                 _asteroids.value = parseAsteroidsJsonResult(obj)
                 _status.value = AsteroidApiStatus.DONE

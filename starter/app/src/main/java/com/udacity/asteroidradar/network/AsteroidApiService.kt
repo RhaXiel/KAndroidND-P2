@@ -29,7 +29,7 @@ interface AsteroidApiService {
                               @Query("api_key") apiKey : String) : ResponseBody
 
     @GET("planetary/apod")
-    suspend fun getImageOfTheDay(@Query("api_key") apiKey : String): PictureOfDay
+    suspend fun getPictureOfTheDay(@Query("api_key") apiKey : String): PictureOfDay
 }
 
 object AsteroidApi {
