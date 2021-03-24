@@ -1,14 +1,14 @@
-//package com.udacity.asteroidradar.database
-//
-//import android.content.Context
-//import androidx.room.Database
-//import androidx.room.Room
-//import androidx.room.RoomDatabase
-//
-//@Database(entities = [Asteroid::class], version = 1, exportSchema = false)
-//abstract  class AsteroidDatabase : RoomDatabase(), AsteroidDatabaseDao {
-//    abstract val asteroidDatabaseDao : AsteroidDatabaseDao
-//
+package com.udacity.asteroidradar.database
+
+import android.content.Context
+import androidx.room.Database
+import androidx.room.Room
+import androidx.room.RoomDatabase
+
+@Database(entities = [DatabaseAsteroid::class], version = 1) //, exportSchema = false
+abstract  class AsteroidDatabase : RoomDatabase() { //, AsteroidDatabaseDao
+    abstract val asteroidDatabaseDao : AsteroidDatabaseDao
+
 //    companion object {
 //        @Volatile
 //        private var INSTANCE: AsteroidDatabase? = null
@@ -31,4 +31,17 @@
 //            }
 //        }
 //    }
-//}
+}
+
+private lateinit var INSTANCE: AsteroidDatabase
+
+fun getDatabase(context: Context): AsteroidDatabase {
+    synchronized(AsteroidDatabase::class.java) {
+        if (!::INSTANCE.isInitialized) {
+            INSTANCE = Room.databaseBuilder(context.applicationContext,
+                    AsteroidDatabase::class.java,
+                    "asteroid_cache_database").build()
+        }
+    }
+    return INSTANCE
+}

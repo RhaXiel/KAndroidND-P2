@@ -2,8 +2,12 @@ package com.udacity.asteroidradar
 
 import android.os.Parcelable
 import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
+import com.udacity.asteroidradar.database.DatabaseAsteroid
 import kotlinx.android.parcel.Parcelize
 
+
+//@JsonClass(generateAdapter = true)
 @Parcelize
 data class Asteroid(val id: Long,
                     val codename: String,
@@ -13,6 +17,24 @@ data class Asteroid(val id: Long,
                     val relativeVelocity: Double,
                     val distanceFromEarth: Double,
                     val isPotentiallyHazardous: Boolean) : Parcelable
+
+@JsonClass(generateAdapter = true)
+data class NetworkAsteroidContainer(val asteroids: List<Asteroid>)
+
+fun ArrayList<Asteroid>.asDatabaseModel(): Array<DatabaseAsteroid> {
+    return map {
+        DatabaseAsteroid(
+                id = it.id,
+                codename = it.codename,
+                closeApproachDate = it.closeApproachDate,
+                absoluteMagnitude = it.absoluteMagnitude,
+                estimatedDiameter = it.estimatedDiameter,
+                relativeVelocity = it.relativeVelocity,
+                distanceFromEarth = it.distanceFromEarth,
+                isPotentiallyHazardous = it.isPotentiallyHazardous)
+    }.toTypedArray()
+}
+
 
 /*
     //All measured in KM
