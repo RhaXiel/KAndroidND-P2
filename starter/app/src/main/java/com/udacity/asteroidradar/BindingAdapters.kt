@@ -34,7 +34,10 @@ fun bindPictureOfDay(imageView: ImageView, pictureOfDay: PictureOfDay?) {
     if(pictureOfDay != null){
         pictureOfDay?.url?.let {
             val context = imageView.context
-            Picasso.with(context).load(pictureOfDay.url).placeholder(R.drawable.loading_animation).into(imageView)
+            Picasso.with(context).load(pictureOfDay.url)
+                    .placeholder(R.drawable.loading_animation)
+                    .error(R.drawable.ic_connection_error)
+                    .into(imageView)
             imageView.contentDescription = pictureOfDay.title
         }
     }
