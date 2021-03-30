@@ -29,11 +29,14 @@ fun bindAsteroidStatusImage(imageView: ImageView, isHazardous: Boolean) {
 
 @BindingAdapter("pictureOfDay")
 fun bindPictureOfDay(imageView: ImageView, pictureOfDay: PictureOfDay?) {
-    pictureOfDay?.url?.let {
-        val context = imageView.context
-        Picasso.with(context).load(pictureOfDay.url).placeholder(R.drawable.loading_animation).into(imageView)
-        imageView.contentDescription = pictureOfDay.title
+    if(pictureOfDay != null){
+        pictureOfDay?.url?.let {
+            val context = imageView.context
+            Picasso.with(context).load(pictureOfDay.url).placeholder(R.drawable.loading_animation).into(imageView)
+            imageView.contentDescription = pictureOfDay.title
+        }
     }
+
 }
 
 @BindingAdapter("asteroidStatusImage")

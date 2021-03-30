@@ -9,10 +9,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
 
-class AsteroidRadarApplication  : Application(){
+class AsteroidRadarApplication : Application() {
     val applicationScope = CoroutineScope(Dispatchers.Default)
 
-    private fun delayedInit(){
+    private fun delayedInit() {
         applicationScope.launch {
             setupRecurringWork()
         }
@@ -28,8 +28,7 @@ class AsteroidRadarApplication  : Application(){
                         setRequiresDeviceIdle(true)
                 }.build()
 
-        val repeatingRequest
-                = PeriodicWorkRequestBuilder<RefreshDataWorker>(1, TimeUnit.DAYS)
+        val repeatingRequest = PeriodicWorkRequestBuilder<RefreshDataWorker>(1, TimeUnit.DAYS)
                 .setConstraints(constraints)
                 .build()
 

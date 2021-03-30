@@ -23,12 +23,12 @@ class MainFragment : Fragment() {
 
         binding.viewModel = viewModel
 
-        binding.asteroidRecycler.adapter = AsteroidListAdapter(AsteroidListAdapter.OnClickListener{
+        binding.asteroidRecycler.adapter = AsteroidListAdapter(AsteroidListAdapter.OnClickListener {
             viewModel.displayAsteroidDetails(it)
         })
 
-        viewModel.navigateToSelectedAsteroid.observe(viewLifecycleOwner, Observer{
-            if (null != it){
+        viewModel.navigateToSelectedAsteroid.observe(viewLifecycleOwner, Observer {
+            if (null != it) {
                 this.findNavController().navigate(MainFragmentDirections.actionShowDetail(it))
                 viewModel.displayAsteroidDetailsComplete()
             }
