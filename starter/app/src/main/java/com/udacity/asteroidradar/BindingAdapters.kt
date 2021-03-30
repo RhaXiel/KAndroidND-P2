@@ -22,8 +22,10 @@ fun bindRecyclerView(recyclerView: RecyclerView, data: List<Asteroid>?) {
 fun bindAsteroidStatusImage(imageView: ImageView, isHazardous: Boolean) {
     if (isHazardous) {
         imageView.setImageResource(R.drawable.ic_status_potentially_hazardous)
+        imageView.contentDescription = imageView.context.getString(R.string.potentially_hazardous_asteroid_image)
     } else {
         imageView.setImageResource(R.drawable.ic_status_normal)
+        imageView.contentDescription = imageView.context.getString(R.string.not_hazardous_asteroid_image)
     }
 }
 
@@ -43,8 +45,10 @@ fun bindPictureOfDay(imageView: ImageView, pictureOfDay: PictureOfDay?) {
 fun bindDetailsStatusImage(imageView: ImageView, isHazardous: Boolean) {
     if (isHazardous) {
         imageView.setImageResource(R.drawable.asteroid_hazardous)
+        imageView.contentDescription = imageView.context.getString(R.string.potentially_hazardous_asteroid_image)
     } else {
         imageView.setImageResource(R.drawable.asteroid_safe)
+        imageView.contentDescription = imageView.context.getString(R.string.not_hazardous_asteroid_image)
     }
 }
 
@@ -72,13 +76,16 @@ fun bindStatus(statusImageView: ImageView, status: AsteroidApiStatus) {
         AsteroidApiStatus.LOADING -> {
             statusImageView.visibility = View.VISIBLE
             statusImageView.setImageResource(R.drawable.loading_animation)
+            statusImageView.contentDescription = statusImageView.context.getString(R.string.loading_data_message)
         }
         AsteroidApiStatus.ERROR -> {
             statusImageView.visibility = View.VISIBLE
             statusImageView.setImageResource(R.drawable.ic_connection_error)
+            statusImageView.contentDescription = statusImageView.context.getString(R.string.error_loading_message)
         }
         AsteroidApiStatus.DONE -> {
             statusImageView.visibility = View.GONE
+            statusImageView.contentDescription = ""
         }
     }
 }

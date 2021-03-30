@@ -17,9 +17,6 @@ import org.json.JSONObject
 
 class AsteroidRepository(private val database: AsteroidDatabase) {
 
-//    val asteroids: LiveData<List<Asteroid>> = Transformations.map(database.asteroidDatabaseDao.getAllAsteroids()) {
-//        it.asDomainModel()
-//    }
     val asteroids: LiveData<List<Asteroid>> =
             Transformations.map(database.asteroidDatabaseDao.getAllAsteroids()){
                 it.asDomainModel()
